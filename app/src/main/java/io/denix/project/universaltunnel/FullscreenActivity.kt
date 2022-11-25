@@ -1,7 +1,7 @@
 package io.denix.project.universaltunnel
 
 import androidx.appcompat.app.AppCompatActivity
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,14 +12,23 @@ import android.widget.TextView
 import io.denix.project.universaltunnel.databinding.ActivityFullscreenBinding
 
 class FullscreenActivity : AppCompatActivity() {
+    companion object {
+        private const val DELAY = 1000
+    }
 
     private lateinit var binding: ActivityFullscreenBinding
     private lateinit var fullscreenContent: TextView
+
     private val hideHandler = Handler(Looper.myLooper()!!)
 
-    @SuppressLint("InlinedApi")
-    private val hidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
+    private val hideRunnable = Runnable { hide() }
+    private val mainPageRunnable = Runnable { goToMainPage() }
+
+    private fun hide() {
+        // App bar = Action bar = Title bar
+        supportActionBar?.hide()
+
+        // Remove the status and navigation bar
         if (Build.VERSION.SDK_INT >= 30) {
             fullscreenContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
@@ -34,18 +43,16 @@ class FullscreenActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
+
+        hideHandler.postDelayed(mainPageRunnable, DELAY.toLong())
     }
 
-    private val showPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        supportActionBar?.show()
+    private fun goToMainPage() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
-    private var isFullscreen: Boolean = false
-
-    private val hideRunnable = Runnable { hide() }
-
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,7 +60,6 @@ class FullscreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        isFullscreen = true
         fullscreenContent = binding.fullscreenContent
     }
 
@@ -62,22 +68,8 @@ class FullscreenActivity : AppCompatActivity() {
         delayedHide(0)
     }
 
-    private fun hide() {
-        // app bar = action bar = title bar
-        supportActionBar?.hide()
-        isFullscreen = false
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        hideHandler.removeCallbacks(showPart2Runnable)
-        hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY.toLong())
-    }
-
     private fun delayedHide(delayMillis: Int) {
         hideHandler.removeCallbacks(hideRunnable)
         hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
-    }
-
-    companion object {
-        private const val UI_ANIMATION_DELAY = 300
     }
 }
