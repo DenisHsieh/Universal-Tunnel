@@ -15,6 +15,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.UniversalTunnel.NoActionBar">
             <meta-data
@@ -34,6 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
