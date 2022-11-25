@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="io.denix.project.universaltunnel.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_device"
+        android:name="io.denix.project.universaltunnel.ui.device.DeviceFragment"
+        android:label="@string/menu_device"
+        tools:layout="@layout/fragment_device" />
+
+    <fragment
+        android:id="@+id/nav_finance"
+        android:name="io.denix.project.universaltunnel.ui.finance.FinanceFragment"
+        android:label="@string/menu_finance"
+        tools:layout="@layout/fragment_finance" />
+
+    <fragment
+        android:id="@+id/nav_media"
+        android:name="io.denix.project.universaltunnel.ui.media.MediaFragment"
+        android:label="@string/menu_media"
+        tools:layout="@layout/fragment_media" />
+
+    <fragment
+        android:id="@+id/nav_note"
+        android:name="io.denix.project.universaltunnel.ui.note.NoteFragment"
+        android:label="@string/menu_note"
+        tools:layout="@layout/fragment_note" />
+</navigation>
