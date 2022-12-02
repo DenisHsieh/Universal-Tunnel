@@ -1,13 +1,13 @@
-package io.denix.project.universaltunnel.ui.device
+package io.denix.project.universaltunnel.ui.health
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DeviceViewModel : ViewModel() {
+class HealthViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is device Fragment"
+        value = "Coming soon...(Health)"
     }
     val text: LiveData<String> = _text
 }
