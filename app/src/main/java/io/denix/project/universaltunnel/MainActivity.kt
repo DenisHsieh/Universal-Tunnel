@@ -27,8 +27,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Test Crash", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            throw RuntimeException("Test Crash")
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

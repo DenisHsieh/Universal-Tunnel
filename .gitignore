@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/androidstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=androidstudio
 
+### Apple ###
+.DS_Store
+
 ### AndroidStudio ###
 # Covers files to be ignored for android development using Android Studio.
 
@@ -54,7 +57,7 @@ captures/
 *.keystore
 
 # Google Services (e.g. APIs or Firebase)
-# google-services.json
+google-services.json
 
 # Android Patch
 gen-external-apklibs
