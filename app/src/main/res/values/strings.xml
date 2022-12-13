@@ -14,5 +14,6 @@
     <string name="menu_finance">Finance</string>
     <string name="menu_media">Media</string>
     <string name="menu_note">Note</string>
+    <string name="title_activity_user">UserActivity</string>
 
 </resources>

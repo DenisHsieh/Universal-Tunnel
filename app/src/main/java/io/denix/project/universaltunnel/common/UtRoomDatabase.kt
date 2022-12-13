@@ -1,30 +1,31 @@
-package io.denix.project.universaltunnel.util
+package io.denix.project.universaltunnel.common
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.denix.project.universaltunnel.data.note.Note
-import io.denix.project.universaltunnel.data.user.User
-import io.denix.project.universaltunnel.data.user.UserDao
+import io.denix.project.universaltunnel.data.note.model.NoteDao
+import io.denix.project.universaltunnel.data.note.model.NoteEntity
+import io.denix.project.universaltunnel.data.user.model.UserDao
+import io.denix.project.universaltunnel.data.user.model.UserEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Note::class], version = 1, exportSchema = false)
-abstract class UTRoomDatabase: RoomDatabase() {
+@Database(entities = [UserEntity::class, NoteEntity::class], version = 1, exportSchema = false)
+abstract class UtRoomDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
-//    abstract fun noteDao(): NoteDao
+    abstract fun noteDao(): NoteDao
 
     companion object {
         @Volatile
-        private var INSTANCE: UTRoomDatabase? = null
+        private var INSTANCE: UtRoomDatabase? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): UTRoomDatabase {
+        fun getDatabase(context: Context, scope: CoroutineScope): UtRoomDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    UTRoomDatabase::class.java,
+                    UtRoomDatabase::class.java,
                     "ut_database"
                 ).addCallback(UTDatabaseCallback(scope)).build()
                 INSTANCE = instance
@@ -44,8 +45,7 @@ abstract class UTRoomDatabase: RoomDatabase() {
         }
 
         fun populateUser(userDao: UserDao) {
-            userDao.deleteAll()
-            //
+            // userDao.deleteAllUsers()
         }
     }
 }

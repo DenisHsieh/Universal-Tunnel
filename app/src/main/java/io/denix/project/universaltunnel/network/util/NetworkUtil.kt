@@ -1,4 +1,4 @@
-package io.denix.project.universaltunnel.util
+package io.denix.project.universaltunnel.network.util
 
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE

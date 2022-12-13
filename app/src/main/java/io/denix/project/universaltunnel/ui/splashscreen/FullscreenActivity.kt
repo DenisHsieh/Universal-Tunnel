@@ -1,4 +1,4 @@
-package io.denix.project.universaltunnel
+package io.denix.project.universaltunnel.ui.splashscreen
 
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
@@ -10,10 +10,11 @@ import android.view.View
 import android.view.WindowInsets
 import android.widget.TextView
 import io.denix.project.universaltunnel.databinding.ActivityFullscreenBinding
+import io.denix.project.universaltunnel.ui.user.UserActivity
 
 class FullscreenActivity : AppCompatActivity() {
     companion object {
-        private const val DELAY = 1000
+        private const val DELAY = 1500
     }
 
     private lateinit var binding: ActivityFullscreenBinding
@@ -22,7 +23,7 @@ class FullscreenActivity : AppCompatActivity() {
     private val hideHandler = Handler(Looper.myLooper()!!)
 
     private val hideRunnable = Runnable { hide() }
-    private val mainPageRunnable = Runnable { goToMainPage() }
+    private val mainPageRunnable = Runnable { goToUserPage() }
 
     private fun hide() {
         // App bar = Action bar = Title bar
@@ -47,8 +48,8 @@ class FullscreenActivity : AppCompatActivity() {
         hideHandler.postDelayed(mainPageRunnable, DELAY.toLong())
     }
 
-    private fun goToMainPage() {
-        val intent = Intent(this, MainActivity::class.java)
+    private fun goToUserPage() {
+        val intent = Intent(this, UserActivity::class.java)
         startActivity(intent)
         finish()
     }
