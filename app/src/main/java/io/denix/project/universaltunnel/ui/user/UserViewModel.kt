@@ -2,9 +2,7 @@ package io.denix.project.universaltunnel.ui.user
 
 import android.content.res.AssetManager
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.denix.project.universaltunnel.data.external.User
 import io.denix.project.universaltunnel.data.user.repository.FakeNetworkUserRepository
 import io.denix.project.universaltunnel.data.user.repository.UserRepository
@@ -18,12 +16,12 @@ class UserViewModel(
 ) : ViewModel() {
 
     private var userRepository: UserRepository
-    lateinit var usersLiveData: MutableLiveData<List<User>>
-    private val ioDispatcher = Dispatchers.IO
+    lateinit var usersLiveData: LiveData<List<User>>
+    private val dispatcher = Dispatchers.Default
 
     init {
-        val fakeNetworkDataSource = FakeNetworkDataSource(ioDispatcher, Json, assetManager)
-        userRepository = FakeNetworkUserRepository(ioDispatcher, fakeNetworkDataSource)
+        val fakeNetworkDataSource = FakeNetworkDataSource(dispatcher, Json, assetManager)
+        userRepository = FakeNetworkUserRepository(dispatcher, fakeNetworkDataSource)
     }
 
     fun onViewReady() {
@@ -31,12 +29,13 @@ class UserViewModel(
     }
 
     private fun fetchAllUsers() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch(dispatcher) {
             userRepository.getUsers().collect { userList ->
                 userList.map { user ->
                     Log.d("userRepository", user.toString())
                 }
             }
+//            usersLiveData = userRepository.getUsers().asLiveData()
         }
     }
 }

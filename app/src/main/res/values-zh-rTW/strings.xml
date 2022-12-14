@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">設定</string>
+    <string name="menu_home">家目錄</string>
+    <string name="menu_health">健康紀錄</string>
+    <string name="menu_finance">財務金融</string>
+    <string name="menu_media">影片音訊</string>
+    <string name="menu_note">簡單筆記</string>
+    <string name="hulk">布魯斯．班納</string>
+    <string name="iron_man">東尼．史塔克</string>
+    <string name="captain_america">史蒂夫．羅傑斯</string>
+    <string name="ant_man">史考特．朗恩</string>
+    <string name="choose_character">選擇角色</string>
+</resources>

@@ -8,9 +8,12 @@ import android.view.View
 import android.view.WindowInsets
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import io.denix.project.universaltunnel.R
 import io.denix.project.universaltunnel.ui.MainActivity
 import io.denix.project.universaltunnel.databinding.ActivityUserBinding
+import kotlinx.coroutines.*
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
@@ -22,13 +25,33 @@ class UserActivity : AppCompatActivity() {
     private lateinit var imageViewCaptain: ImageView
     private lateinit var imageViewAntMan: ImageView
 
+    private lateinit var textViewTitle: TextView
     private lateinit var buttonReady: Button
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var viewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initializeUiAndViewModel()
+        hide()
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+
+        chooseCharacterAndReadyToGo()
+        animateProgressBarAndShowCharacters()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.onViewReady()
+    }
+
+    private fun initializeUiAndViewModel() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -41,22 +64,13 @@ class UserActivity : AppCompatActivity() {
         imageViewCaptain = binding.imageViewCaptain
         imageViewAntMan = binding.imageViewAntman
 
+        textViewTitle = binding.textViewTitle
+        textViewTitle.text = getString(R.string.choose_character)
+
         buttonReady = binding.buttonReady
+        progressBar = binding.progressBar
 
         viewModel = UserViewModel(this.assets)
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        hide()
-        chooseCharacterAndReadyToGo()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        viewModel.onViewReady()
     }
 
     private fun chooseCharacterAndReadyToGo() {
@@ -66,7 +80,7 @@ class UserActivity : AppCompatActivity() {
             imageViewCaptain.imageAlpha = 100
             imageViewAntMan.imageAlpha = 100
 
-            characterName.text = "Bruce Banner"
+            characterName.text = getString(R.string.hulk)
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
@@ -77,7 +91,7 @@ class UserActivity : AppCompatActivity() {
             imageViewCaptain.imageAlpha = 100
             imageViewAntMan.imageAlpha = 100
 
-            characterName.text = "Tony Stark"
+            characterName.text = getString(R.string.iron_man)
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
@@ -88,7 +102,7 @@ class UserActivity : AppCompatActivity() {
             imageViewCaptain.imageAlpha = 255
             imageViewAntMan.imageAlpha = 100
 
-            characterName.text = "Steve Rogers"
+            characterName.text = getString(R.string.captain_america)
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
@@ -99,7 +113,7 @@ class UserActivity : AppCompatActivity() {
             imageViewCaptain.imageAlpha = 100
             imageViewAntMan.imageAlpha = 255
 
-            characterName.text = "Scott Lang"
+            characterName.text = getString(R.string.ant_man)
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
@@ -110,6 +124,29 @@ class UserActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun animateProgressBarAndShowCharacters() {
+        progressBar.progress = 0
+        val progressStep = 25
+
+        GlobalScope.launch (Dispatchers.IO) {
+            for (i in 0..3) {
+                progressBar.progress += progressStep
+                delay(500)
+            }
+            showCharacters()
+        }
+    }
+
+    private fun showCharacters() {
+        runOnUiThread(Runnable {
+            progressBar.visibility = View.INVISIBLE
+            imageViewHulk.visibility = View.VISIBLE
+            imageViewIronMan.visibility = View.VISIBLE
+            imageViewCaptain.visibility = View.VISIBLE
+            imageViewAntMan.visibility = View.VISIBLE
+        })
     }
 
     private fun hide() {
