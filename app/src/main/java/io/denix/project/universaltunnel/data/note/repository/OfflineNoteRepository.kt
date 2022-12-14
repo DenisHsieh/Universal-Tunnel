@@ -27,7 +27,7 @@ class OfflineNoteRepository(
         }
     }
 
-    override suspend fun sync() {
+    override suspend fun syncInDatabase() {
         noteDao.deleteAllNotes()
         val networkNotes = network.getNotes()
         noteDao.upsertNotes(

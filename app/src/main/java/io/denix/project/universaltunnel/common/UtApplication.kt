@@ -7,6 +7,6 @@ import kotlinx.coroutines.SupervisorJob
 class UtApplication: Application() {
     private val applicationScope = CoroutineScope(SupervisorJob())
 
-    private val database by lazy { UtRoomDatabase.getDatabase(this, applicationScope) }
+    val database by lazy { UtRoomDatabase.getDatabase(this, applicationScope) }
 //    val userRepository by lazy { OfflineUserRepository(database.userDao()) }
 }

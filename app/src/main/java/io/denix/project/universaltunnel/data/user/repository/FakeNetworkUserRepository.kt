@@ -1,7 +1,10 @@
 package io.denix.project.universaltunnel.data.user.repository
 
 import io.denix.project.universaltunnel.data.external.User
+import io.denix.project.universaltunnel.data.user.model.UserDao
+import io.denix.project.universaltunnel.data.user.model.asEntity
 import io.denix.project.universaltunnel.network.fake.FakeNetworkDataSource
+import io.denix.project.universaltunnel.network.model.NetworkUser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -9,6 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 class FakeNetworkUserRepository(
+    private val userDao: UserDao,
     private val ioDispatcher: CoroutineDispatcher,
     private val dataSource: FakeNetworkDataSource
 ) : UserRepository {
@@ -32,5 +36,11 @@ class FakeNetworkUserRepository(
         return getUsers().map { it.first { user -> user.id == id } }
     }
 
-    override suspend fun sync() {}
+    override suspend fun syncInDatabase() {
+        val networkUsers = dataSource.getUsers()
+        userDao.deleteAllUsers()
+        userDao.upsertUsers(
+            entities = networkUsers.map(NetworkUser::asEntity)
+        )
+    }
 }

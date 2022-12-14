@@ -27,8 +27,9 @@ class OfflineUserRepository(
         }
     }
 
-    override suspend fun sync() {
+    override suspend fun syncInDatabase() {
         val networkUsers = network.getUsers()
+        userDao.deleteAllUsers()
         userDao.upsertUsers(
             entities = networkUsers.map(NetworkUser::asEntity)
         )

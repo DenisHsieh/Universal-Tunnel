@@ -30,5 +30,5 @@ class FakeNetworkNoteRepository(
         return getNotes().map { it.first { note -> note.id == id } }
     }
 
-    override suspend fun sync() {}
+    override suspend fun syncInDatabase() {}
 }

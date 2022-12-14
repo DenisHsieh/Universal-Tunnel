@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.denix.project.universaltunnel.R
+import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.ui.MainActivity
 import io.denix.project.universaltunnel.databinding.ActivityUserBinding
 import kotlinx.coroutines.*
@@ -70,7 +71,7 @@ class UserActivity : AppCompatActivity() {
         buttonReady = binding.buttonReady
         progressBar = binding.progressBar
 
-        viewModel = UserViewModel(this.assets)
+        viewModel = UserViewModel((application as UtApplication).database.userDao() ,this.assets)
     }
 
     private fun chooseCharacterAndReadyToGo() {
