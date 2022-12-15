@@ -10,11 +10,16 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import io.denix.project.universaltunnel.R
 import io.denix.project.universaltunnel.common.UtApplication
+import io.denix.project.universaltunnel.common.UtRoomDatabase
 import io.denix.project.universaltunnel.ui.MainActivity
 import io.denix.project.universaltunnel.databinding.ActivityUserBinding
+import io.denix.project.universaltunnel.network.util.ConnectivityManagerNetworkMonitor
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
@@ -31,12 +36,16 @@ class UserActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
 
     private lateinit var viewModel: UserViewModel
+    private lateinit var utRoomDatabase: UtRoomDatabase
+
+    private val connectivityManagerNetworkMonitor = ConnectivityManagerNetworkMonitor(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initializeUiAndViewModel()
-        hide()
+        initializeUi()
+        initializeViewModelAndDatabase()
+        hideSystemBars()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -44,6 +53,20 @@ class UserActivity : AppCompatActivity() {
 
         chooseCharacterAndReadyToGo()
         animateProgressBarAndShowCharacters()
+
+        // 判斷是否有網路
+        GlobalScope.launch(Dispatchers.IO) {
+            connectivityManagerNetworkMonitor.isOnline.collect { isOnline ->
+                when(isOnline) {
+                    true -> {
+                        Snackbar.make(binding.root, "Network status - Online", Snackbar.LENGTH_LONG).show()
+                    }
+                    false -> {
+                        Snackbar.make(binding.root, "Network status - Offline", Snackbar.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -52,7 +75,7 @@ class UserActivity : AppCompatActivity() {
         viewModel.onViewReady()
     }
 
-    private fun initializeUiAndViewModel() {
+    private fun initializeUi() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -70,8 +93,32 @@ class UserActivity : AppCompatActivity() {
 
         buttonReady = binding.buttonReady
         progressBar = binding.progressBar
+    }
 
-        viewModel = UserViewModel((application as UtApplication).database.userDao() ,this.assets)
+    private fun initializeViewModelAndDatabase() {
+        utRoomDatabase = (application as UtApplication).database
+        viewModel = UserViewModel(utRoomDatabase.userDao() ,this.assets)
+    }
+
+    private fun hideSystemBars() {
+        // App bar = Action bar = Title bar
+        supportActionBar?.hide()
+
+        // Remove the status and navigation bar
+        if (Build.VERSION.SDK_INT >= 30) {
+            titleContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+        } else {
+            // Note that some of these constants are new as of API 16 (Jelly Bean)
+            // and API 19 (KitKat). It is safe to use them, as they are inlined
+            // at compile-time and do nothing on earlier devices.
+            titleContent.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                        View.SYSTEM_UI_FLAG_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        }
     }
 
     private fun chooseCharacterAndReadyToGo() {
@@ -148,26 +195,5 @@ class UserActivity : AppCompatActivity() {
             imageViewCaptain.visibility = View.VISIBLE
             imageViewAntMan.visibility = View.VISIBLE
         })
-    }
-
-    private fun hide() {
-        // App bar = Action bar = Title bar
-        supportActionBar?.hide()
-
-        // Remove the status and navigation bar
-        if (Build.VERSION.SDK_INT >= 30) {
-            titleContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else {
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-            titleContent.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                        View.SYSTEM_UI_FLAG_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        }
     }
 }
