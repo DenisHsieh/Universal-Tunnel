@@ -4,15 +4,16 @@ import androidx.room.*
 
 @Dao
 interface LoginDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(vararg login: Login)
 
-    @Query("DELETE FROM login_table")
-    fun deleteAll()
+    @Query(value = "SELECT * FROM login_table")
+    fun getLoginEntities(): List<LoginEntity>
 
-    @Query("SELECT loginStatus FROM login_table WHERE userId == :userId")
-    fun getLoginStatus(userId: Int): Boolean?
+    @Query(value = "SELECT * FROM login_table WHERE userId = :userId")
+    fun getLoginEntities(userId: Int): List<LoginEntity>
 
-    @Query("SELECT * FROM login_table ORDER BY id DESC LIMIT 1")
-    fun getLoginData(): Login
+    @Insert
+    suspend fun insertLogin(entity: LoginEntity)
+
+    @Query(value = "DELETE FROM login_table")
+    suspend fun deleteAllLogins()
 }

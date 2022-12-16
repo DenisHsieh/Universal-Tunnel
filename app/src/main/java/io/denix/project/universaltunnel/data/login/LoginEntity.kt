@@ -5,8 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "login_table")
-data class Login(
+data class LoginEntity(
     @PrimaryKey(autoGenerate = true) val id: Int?,
     @ColumnInfo(name = "userId") val userId: Int?,
-    @ColumnInfo(name = "loginStatus") val loginStatus: Boolean?
+    @ColumnInfo(name = "loginStatus") val loginStatus: Boolean?,
+    @ColumnInfo(name = "timeStamp") val timestamp: Long?
 )

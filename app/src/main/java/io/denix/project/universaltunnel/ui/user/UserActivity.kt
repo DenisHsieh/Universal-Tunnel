@@ -18,8 +18,6 @@ import io.denix.project.universaltunnel.ui.MainActivity
 import io.denix.project.universaltunnel.databinding.ActivityUserBinding
 import io.denix.project.universaltunnel.network.util.ConnectivityManagerNetworkMonitor
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
@@ -38,13 +36,15 @@ class UserActivity : AppCompatActivity() {
     private lateinit var viewModel: UserViewModel
     private lateinit var utRoomDatabase: UtRoomDatabase
 
+    private var userId: Int? = null
+
     private val connectivityManagerNetworkMonitor = ConnectivityManagerNetworkMonitor(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeUi()
-        initializeViewModelAndDatabase()
+        initializeViewModel()
         hideSystemBars()
     }
 
@@ -59,10 +59,10 @@ class UserActivity : AppCompatActivity() {
             connectivityManagerNetworkMonitor.isOnline.collect { isOnline ->
                 when(isOnline) {
                     true -> {
-                        Snackbar.make(binding.root, "Network status - Online", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(binding.root, getString(R.string.network_status_online), Snackbar.LENGTH_LONG).show()
                     }
                     false -> {
-                        Snackbar.make(binding.root, "Network status - Offline", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(binding.root, getString(R.string.network_status_offline), Snackbar.LENGTH_LONG).show()
                     }
                 }
             }
@@ -95,9 +95,11 @@ class UserActivity : AppCompatActivity() {
         progressBar = binding.progressBar
     }
 
-    private fun initializeViewModelAndDatabase() {
+    private fun initializeViewModel() {
         utRoomDatabase = (application as UtApplication).database
-        viewModel = UserViewModel(utRoomDatabase.userDao() ,this.assets)
+        val userDao = utRoomDatabase.userDao()
+        val loginDao = utRoomDatabase.loginDao()
+        viewModel = UserViewModel(userDao, loginDao, this.assets)
     }
 
     private fun hideSystemBars() {
@@ -132,6 +134,7 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
+            userId = 0
         }
         imageViewIronMan.setOnClickListener {
             imageViewHulk.imageAlpha = 100
@@ -143,6 +146,7 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
+            userId = 1
         }
         imageViewCaptain.setOnClickListener {
             imageViewHulk.imageAlpha = 100
@@ -154,6 +158,7 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
+            userId = 2
         }
         imageViewAntMan.setOnClickListener {
             imageViewHulk.imageAlpha = 100
@@ -165,25 +170,33 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
+            userId = 3
         }
 
         buttonReady.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            // 使用者登入
+            if (userId == null) {
+                Snackbar.make(binding.root, getString(R.string.please_choose_character), Snackbar.LENGTH_LONG).show()
+            } else {
+                viewModel.userLogin(userId!!)
+                // 進入主畫面
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
     private fun animateProgressBarAndShowCharacters() {
-        progressBar.progress = 0
-        val progressStep = 25
+        GlobalScope.launch(Dispatchers.IO) {
+            viewModel.progressBarFlow.collect { progressStatus ->
+                progressBar.progress = progressStatus
 
-        GlobalScope.launch (Dispatchers.IO) {
-            for (i in 0..3) {
-                progressBar.progress += progressStep
-                delay(500)
+                if (progressStatus == 100) {
+                    delay(500)
+                    showCharacters()
+                }
             }
-            showCharacters()
         }
     }
 

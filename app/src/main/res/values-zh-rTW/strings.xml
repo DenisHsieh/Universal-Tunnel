@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings">設定</string>
-    <string name="menu_home">家目錄</string>
+    <string name="menu_home">我的目錄</string>
     <string name="menu_health">健康紀錄</string>
     <string name="menu_finance">財務金融</string>
     <string name="menu_media">影片音訊</string>
@@ -11,4 +11,8 @@
     <string name="captain_america">史蒂夫．羅傑斯</string>
     <string name="ant_man">史考特．朗恩</string>
     <string name="choose_character">選擇角色</string>
+    <string name="network_status_online">網路狀態 - 上線</string>
+    <string name="network_status_offline">網路狀態 - 離線</string>
+    <string name="please_choose_character">請選擇角色</string>
+    <string name="ready_to_go">準備出發</string>
 </resources>

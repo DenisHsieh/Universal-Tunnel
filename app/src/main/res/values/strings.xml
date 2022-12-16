@@ -22,5 +22,9 @@
     <string name="iron_man">Tony Stark</string>
     <string name="captain_america">Steve Rogers</string>
     <string name="ant_man">Scott Lang</string>
+    <string name="network_status_online">Network status - Online</string>
+    <string name="network_status_offline">Network status - Offline</string>
+    <string name="please_choose_character">Please choose a character</string>
+    <string name="ready_to_go">Ready To Go</string>
 
 </resources>

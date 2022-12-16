@@ -4,17 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
+import io.denix.project.universaltunnel.data.login.LoginDao
+import io.denix.project.universaltunnel.data.login.LoginEntity
 import io.denix.project.universaltunnel.data.note.model.NoteDao
 import io.denix.project.universaltunnel.data.note.model.NoteEntity
 import io.denix.project.universaltunnel.data.user.model.UserDao
 import io.denix.project.universaltunnel.data.user.model.UserEntity
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-@Database(entities = [UserEntity::class, NoteEntity::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class, LoginEntity::class, NoteEntity::class], version = 1, exportSchema = false)
 abstract class UtRoomDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun loginDao(): LoginDao
     abstract fun noteDao(): NoteDao
 
     companion object {
@@ -27,25 +28,10 @@ abstract class UtRoomDatabase: RoomDatabase() {
                     context.applicationContext,
                     UtRoomDatabase::class.java,
                     "ut_database"
-                ).addCallback(UTDatabaseCallback(scope)).build()
+                ).build()
                 INSTANCE = instance
                 instance
             }
-        }
-    }
-
-    private class UTDatabaseCallback(private val scope: CoroutineScope): RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    populateUser(database.userDao())
-                }
-            }
-        }
-
-        fun populateUser(userDao: UserDao) {
-            // userDao.deleteAllUsers()
         }
     }
 }

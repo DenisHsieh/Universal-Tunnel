@@ -9,8 +9,15 @@ import android.os.Looper
 import android.view.View
 import android.view.WindowInsets
 import android.widget.TextView
+import io.denix.project.universaltunnel.common.UtApplication
+import io.denix.project.universaltunnel.common.UtRoomDatabase
 import io.denix.project.universaltunnel.databinding.ActivityFullscreenBinding
+import io.denix.project.universaltunnel.ui.MainActivity
 import io.denix.project.universaltunnel.ui.user.UserActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class FullscreenActivity : AppCompatActivity() {
     companion object {
@@ -21,11 +28,60 @@ class FullscreenActivity : AppCompatActivity() {
     private lateinit var fullscreenContent: TextView
 
     private val hideHandler = Handler(Looper.myLooper()!!)
+    private val hideRunnable = Runnable { hideSystemBars() }
 
-    private val hideRunnable = Runnable { hide() }
-    private val mainPageRunnable = Runnable { goToUserPage() }
+    private lateinit var utRoomDatabase: UtRoomDatabase
+    private lateinit var viewModel: FullscreenViewModel
 
-    private fun hide() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityFullscreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        fullscreenContent = binding.fullscreenContent
+
+        // initialize Database and ViewModel
+        utRoomDatabase = (application as UtApplication).database
+        viewModel = FullscreenViewModel(utRoomDatabase.loginDao())
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+
+        hideHandler.removeCallbacks(hideRunnable)
+        hideHandler.postDelayed(hideRunnable, 0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(DELAY.toLong())
+            // 檢查是否有角色登入
+            if(viewModel.checkLoginStatus()) {
+                // 有，導入主頁面
+                goToMainPage()
+            } else {
+                // 沒有，導入角色選擇頁面
+                goToUserPage()
+            }
+            finish()
+        }
+    }
+
+    private fun goToUserPage() {
+        val userIntent = Intent(this, UserActivity::class.java)
+        startActivity(userIntent)
+    }
+
+    private fun goToMainPage() {
+        val mainIntent = Intent(this, MainActivity::class.java)
+        startActivity(mainIntent)
+    }
+
+    private fun hideSystemBars() {
         // App bar = Action bar = Title bar
         supportActionBar?.hide()
 
@@ -44,33 +100,5 @@ class FullscreenActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
-
-        hideHandler.postDelayed(mainPageRunnable, DELAY.toLong())
-    }
-
-    private fun goToUserPage() {
-        val intent = Intent(this, UserActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = ActivityFullscreenBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        fullscreenContent = binding.fullscreenContent
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        delayedHide(0)
-    }
-
-    private fun delayedHide(delayMillis: Int) {
-        hideHandler.removeCallbacks(hideRunnable)
-        hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
     }
 }
