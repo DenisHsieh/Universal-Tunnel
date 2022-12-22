@@ -6,14 +6,32 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
 
+    /**
+     * with Flow
+      */
     @Query(value = "SELECT * FROM user_table WHERE id = :userId")
-    fun getUserEntity(userId: Int): Flow<UserEntity>
+    fun getUserEntityFlow(userId: Int): Flow<UserEntity>
+
+    /**
+     * with Flow
+     */
+    @Query(value = "SELECT * FROM user_table")
+    fun getUserEntitiesFlow(): Flow<List<UserEntity>>
+
+    /**
+     * with Flow
+     */
+    @Query(value = "SELECT * FROM user_table WHERE id IN (:userIds)")
+    fun getUserEntitiesFlow(userIds: Set<Int>): Flow<List<UserEntity>>
+
+    @Query(value = "SELECT * FROM user_table WHERE id = :userId")
+    fun getUserEntity(userId: Int): UserEntity
 
     @Query(value = "SELECT * FROM user_table")
-    fun getUserEntities(): Flow<List<UserEntity>>
+    fun getUserEntities(): List<UserEntity>
 
     @Query(value = "SELECT * FROM user_table WHERE id IN (:userIds)")
-    fun getUserEntities(userIds: Set<Int>): Flow<List<UserEntity>>
+    fun getUserEntities(userIds: Set<Int>): List<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreUsers(userEntities: List<UserEntity>): List<Long>

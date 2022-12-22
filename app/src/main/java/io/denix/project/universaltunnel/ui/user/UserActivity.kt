@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.denix.project.universaltunnel.R
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
-import io.denix.project.universaltunnel.ui.MainActivity
+import io.denix.project.universaltunnel.ui.main.MainActivity
 import io.denix.project.universaltunnel.databinding.ActivityUserBinding
 import io.denix.project.universaltunnel.network.util.ConnectivityManagerNetworkMonitor
 import kotlinx.coroutines.*
@@ -134,7 +134,7 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
-            userId = 0
+            userId = 1
         }
         imageViewIronMan.setOnClickListener {
             imageViewHulk.imageAlpha = 100
@@ -146,7 +146,7 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
-            userId = 1
+            userId = 2
         }
         imageViewCaptain.setOnClickListener {
             imageViewHulk.imageAlpha = 100
@@ -158,7 +158,7 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
-            userId = 2
+            userId = 3
         }
         imageViewAntMan.setOnClickListener {
             imageViewHulk.imageAlpha = 100
@@ -170,17 +170,18 @@ class UserActivity : AppCompatActivity() {
             characterName.visibility = View.VISIBLE
 
             buttonReady.visibility = View.VISIBLE
-            userId = 3
+            userId = 4
         }
 
         buttonReady.setOnClickListener {
             // 使用者登入
-            if (userId == null) {
+            if (userId == null || userId == 0) {
                 Snackbar.make(binding.root, getString(R.string.please_choose_character), Snackbar.LENGTH_LONG).show()
             } else {
                 viewModel.userLogin(userId!!)
                 // 進入主畫面
                 val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("userId", userId)
                 startActivity(intent)
                 finish()
             }

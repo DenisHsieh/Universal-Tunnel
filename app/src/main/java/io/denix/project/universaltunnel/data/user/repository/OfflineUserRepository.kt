@@ -16,13 +16,13 @@ class OfflineUserRepository(
 ) : UserRepository {
 
     override fun getUsers(): Flow<List<User>> {
-        return userDao.getUserEntities().map {
+        return userDao.getUserEntitiesFlow().map {
             it.map(UserEntity::asExternalModel)
         }
     }
 
     override fun getUser(id: Int): Flow<User> {
-        return userDao.getUserEntity(id).map {
+        return userDao.getUserEntityFlow(id).map {
             it.asExternalModel()
         }
     }

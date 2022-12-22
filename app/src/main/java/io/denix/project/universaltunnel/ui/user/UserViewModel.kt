@@ -49,7 +49,7 @@ class UserViewModel(
                 }
             }
 //            檢查資料庫中，是否有使用者資料
-            userDao.getUserEntities().collect { userEntityList ->
+            userDao.getUserEntitiesFlow().collect { userEntityList ->
                 userEntityList.map { userEntity ->
                     Log.d("userEntity", userEntity.toString())
                 }

@@ -12,7 +12,7 @@ import android.widget.TextView
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
 import io.denix.project.universaltunnel.databinding.ActivityFullscreenBinding
-import io.denix.project.universaltunnel.ui.MainActivity
+import io.denix.project.universaltunnel.ui.main.MainActivity
 import io.denix.project.universaltunnel.ui.user.UserActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
