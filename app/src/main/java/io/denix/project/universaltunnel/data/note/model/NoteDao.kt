@@ -6,14 +6,41 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 
+    /**
+     * with Flow
+     */
     @Query(value = "SELECT * FROM note_table WHERE id = :noteId")
-    fun getNoteEntity(noteId: Int): Flow<NoteEntity>
+    fun getNoteEntityFlow(noteId: Int): Flow<NoteEntity>
+
+    /**
+     * with Flow
+     */
+    @Query(value = "SELECT * FROM note_table")
+    fun getNoteEntitiesFlow(): Flow<List<NoteEntity>>
+
+    /**
+     * with Flow
+     */
+    @Query(value = "SELECT * FROM note_table WHERE id IN (:noteIds)")
+    fun getNoteEntitiesFlow(noteIds: Set<Int>): Flow<List<NoteEntity>>
+
+    /**
+     * with Flow
+     */
+    @Query(value = "SELECT * FROM note_table WHERE userId = :userId")
+    fun getNoteEntitiesByUserFlow(userId: Int): Flow<List<NoteEntity>>
+
+    @Query(value = "SELECT * FROM note_table WHERE id = :noteId")
+    fun getNoteEntity(noteId: Int): NoteEntity
 
     @Query(value = "SELECT * FROM note_table")
-    fun getNoteEntities(): Flow<List<NoteEntity>>
+    fun getNoteEntities(): List<NoteEntity>
 
     @Query(value = "SELECT * FROM note_table WHERE id IN (:noteIds)")
-    fun getNoteEntities(noteIds: Set<Int>): Flow<List<NoteEntity>>
+    fun getNoteEntities(noteIds: Set<Int>): List<NoteEntity>
+
+    @Query(value = "SELECT * FROM note_table WHERE userId = :userId")
+    fun getNoteEntitiesByUser(userId: Int): List<NoteEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreNotes(noteEntities: List<NoteEntity>): List<Long>

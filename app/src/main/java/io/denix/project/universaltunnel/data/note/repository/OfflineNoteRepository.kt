@@ -16,13 +16,13 @@ class OfflineNoteRepository(
 ) : NoteRepository {
 
     override fun getNotes(): Flow<List<Note>> {
-        return noteDao.getNoteEntities().map {
+        return noteDao.getNoteEntitiesFlow().map {
             it.map(NoteEntity::asExternalModel)
         }
     }
 
     override fun getNote(id: Int): Flow<Note> {
-        return noteDao.getNoteEntity(id).map {
+        return noteDao.getNoteEntityFlow(id).map {
             it.asExternalModel()
         }
     }

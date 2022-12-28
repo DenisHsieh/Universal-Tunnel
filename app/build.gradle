@@ -9,6 +9,10 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 android {
     namespace 'io.denix.project.universaltunnel'
     compileSdk 33
@@ -102,4 +106,8 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Epoxy
+    implementation "com.airbnb.android:epoxy:$epoxy_version"
+    kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
 }
