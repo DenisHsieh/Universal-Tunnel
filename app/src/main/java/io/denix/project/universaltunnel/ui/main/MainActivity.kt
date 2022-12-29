@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import io.denix.project.universaltunnel.R
+import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
 import io.denix.project.universaltunnel.databinding.ActivityMainBinding
@@ -130,6 +131,10 @@ class MainActivity : AppCompatActivity() {
         // 登出 & 清除資料
         viewModel.logout(userId)
         viewModel.cleanUpLoginData()
+
+        val sharedPrefsUtil = SharedPrefsUtil()
+        sharedPrefsUtil.removeLoginUserId(this)
+
         // 導回 userActivity
         val userIntent = Intent(this, UserActivity::class.java)
         startActivity(userIntent)

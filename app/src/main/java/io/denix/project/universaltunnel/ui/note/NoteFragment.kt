@@ -8,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.databinding.FragmentNoteBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class NoteFragment : Fragment() {
 
@@ -34,7 +38,7 @@ class NoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        initializeRecyclerView()
+        initializeRecyclerView()
     }
 
     override fun onDestroyView() {
@@ -52,11 +56,20 @@ class NoteFragment : Fragment() {
             NoteViewModelFactory(application, noteDao, loginDao, application.assets))[NoteViewModel::class.java]
     }
 
-//    private fun initializeRecyclerView() {
-//        recyclerViewNote = binding.recyclerViewNote
-//        recyclerViewNote.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-//
-//        noteAdapter = NoteAdapter()
-//        recyclerViewNote.adapter = noteAdapter
-//    }
+    private fun initializeRecyclerView() {
+        recyclerViewNote = binding.recyclerViewNote
+        recyclerViewNote.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+
+        // 取得 userId
+        var userId = 0
+        val sharedPrefsUtil = SharedPrefsUtil()
+        this.context?.let { userId = sharedPrefsUtil.getLoginUserId(it) }
+
+        GlobalScope.launch(Dispatchers.IO) {
+            // 使用 userId 查詢 noteList
+            val noteList = noteViewModel.getNotesByUser(userId)
+            noteAdapter = NoteAdapter(noteList)
+            recyclerViewNote.adapter = noteAdapter
+        }
+    }
 }

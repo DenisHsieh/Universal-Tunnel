@@ -12,6 +12,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import io.denix.project.universaltunnel.R
+import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
 import io.denix.project.universaltunnel.ui.main.MainActivity
@@ -179,6 +180,10 @@ class UserActivity : AppCompatActivity() {
                 Snackbar.make(binding.root, getString(R.string.please_choose_character), Snackbar.LENGTH_LONG).show()
             } else {
                 viewModel.userLogin(userId!!)
+
+                val sharedPrefsUtil = SharedPrefsUtil()
+                sharedPrefsUtil.setLoginUserId(this, userId!!)
+
                 // 進入主畫面
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("userId", userId)

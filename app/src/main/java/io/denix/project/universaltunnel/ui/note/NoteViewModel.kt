@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.res.AssetManager
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.denix.project.universaltunnel.data.external.Note
 import io.denix.project.universaltunnel.data.login.LoginDao
 import io.denix.project.universaltunnel.data.login.LoginRepository
 import io.denix.project.universaltunnel.data.note.model.NoteDao
@@ -13,6 +13,7 @@ import io.denix.project.universaltunnel.data.note.repository.FakeNetworkNoteRepo
 import io.denix.project.universaltunnel.data.note.repository.NoteRepository
 import io.denix.project.universaltunnel.network.fake.FakeNetworkDataSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -52,5 +53,12 @@ class NoteViewModel(
                 }
             }
         }
+    }
+
+    suspend fun getNotesByUser(userId: Int): List<Note> {
+        val noteList = viewModelScope.async(ioDispatcher) {
+            return@async (noteRepository as FakeNetworkNoteRepository).getNotesByUser(userId)
+        }
+        return noteList.await()
     }
 }

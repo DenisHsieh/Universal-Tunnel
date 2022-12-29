@@ -3,6 +3,7 @@ package io.denix.project.universaltunnel.data.note.repository
 import io.denix.project.universaltunnel.data.external.Note
 import io.denix.project.universaltunnel.data.note.model.NoteDao
 import io.denix.project.universaltunnel.data.note.model.asEntity
+import io.denix.project.universaltunnel.data.note.model.asExternalModel
 import io.denix.project.universaltunnel.network.fake.FakeNetworkDataSource
 import io.denix.project.universaltunnel.network.model.NetworkNote
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,13 +32,11 @@ class FakeNetworkNoteRepository(
         return getNotes().map { it.first { note -> note.id == id } }
     }
 
-//    fun getNoteByUser(userId: Int): Flow<List<Note>> {
-//        return getNotes().filter { noteList ->
-//            noteList.filter { note ->
-//                note.userId == userId
-//            }
-//        }
-//    }
+    fun getNotesByUser(userId: Int): List<Note> {
+        return noteDao.getNoteEntitiesByUser(userId).map {
+            it.asExternalModel()
+        }
+    }
 
     override suspend fun syncInDatabase() {
         val networkNotes = dataSource.getNotes()

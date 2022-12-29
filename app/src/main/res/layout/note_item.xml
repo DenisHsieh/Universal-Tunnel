@@ -6,32 +6,33 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/note_item"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="3dp"
         app:cardBackgroundColor="@color/purple_200"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="8dp"
         app:cardElevation="5dp" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView_noteTitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_marginEnd="3dp"
                 android:fontFamily="@font/aclonica"
-                android:text="Title" />
+                android:text="Title"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_noteContent"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_marginTop="3dp"
                 android:fontFamily="@font/aclonica"
                 android:text="Content" />
         </LinearLayout>
