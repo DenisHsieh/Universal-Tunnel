@@ -1,4 +1,5 @@
-# Universal-Tunnel: Build your second brain (MVVM/Jetpack Room/Kotlin Coroutine & Flow/Firebase Crashlytics & Cloud Message/LeakCanary)
+# Universal-Tunnel: Build your second brain 
+# (MVVM/Jetpack Room/Kotlin Coroutine & Flow/Airbnb Epoxy/Firebase Crashlytics & Cloud Message/LeakCanary)
 >**A concept application that integrates common personal usages including Health, Finance, Media, Note...**
 
 ### Data Model
@@ -10,7 +11,9 @@
 
 ### Stage 2. 
 * Build a real backend (using Ktor)
+* (or Notion is considered as an option)
 
 ### Stage 3. 
-* Integrate the real backend built in Stage 2
-* (or Notion is considered as a possibility)
+* Integrate the backend built in Stage 2
+
+## More details please see [Wiki](https://github.com/DenisHsieh/Universal-Tunnel/wiki#welcome-to-the-universal-tunnel-wiki)
