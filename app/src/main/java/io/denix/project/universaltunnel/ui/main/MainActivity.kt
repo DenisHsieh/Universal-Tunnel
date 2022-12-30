@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import io.denix.project.universaltunnel.R
 import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
@@ -21,7 +22,6 @@ import io.denix.project.universaltunnel.databinding.ActivityMainBinding
 import io.denix.project.universaltunnel.databinding.NavHeaderMainBinding
 import io.denix.project.universaltunnel.ui.user.UserActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -113,13 +113,13 @@ class MainActivity : AppCompatActivity() {
     private fun showUserInfo() {
         if (userId == 0) {
             // 取得 login data，提取登入 user 資訊
-            GlobalScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 val user = viewModel.getUserFromLoginData()
                 navHeaderMainBinding.textViewUserName.text = "${user.firstName} ${user.lastName}"
                 navHeaderMainBinding.textViewUserMail.text = "${user.firstName}@tunnel.com"
             }
         } else {
-            GlobalScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 val user = viewModel.getUserData(userId)
                 navHeaderMainBinding.textViewUserName.text = "${user.firstName} ${user.lastName}"
                 navHeaderMainBinding.textViewUserMail.text = "${user.firstName}@tunnel.com"

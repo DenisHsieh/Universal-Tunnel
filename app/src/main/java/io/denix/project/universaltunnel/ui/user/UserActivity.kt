@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.denix.project.universaltunnel.R
 import io.denix.project.universaltunnel.common.SharedPrefsUtil
@@ -56,7 +57,7 @@ class UserActivity : AppCompatActivity() {
         animateProgressBarAndShowCharacters()
 
         // 判斷是否有網路
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             connectivityManagerNetworkMonitor.isOnline.collect { isOnline ->
                 when(isOnline) {
                     true -> {
@@ -194,7 +195,7 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun animateProgressBarAndShowCharacters() {
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             viewModel.progressBarFlow.collect { progressStatus ->
                 progressBar.progress = progressStatus
 

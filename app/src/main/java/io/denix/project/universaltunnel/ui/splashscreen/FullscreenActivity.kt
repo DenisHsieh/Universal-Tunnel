@@ -9,13 +9,13 @@ import android.os.Looper
 import android.view.View
 import android.view.WindowInsets
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
 import io.denix.project.universaltunnel.databinding.ActivityFullscreenBinding
 import io.denix.project.universaltunnel.ui.main.MainActivity
 import io.denix.project.universaltunnel.ui.user.UserActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -57,7 +57,7 @@ class FullscreenActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             delay(DELAY.toLong())
             // 檢查是否有角色登入
             if(viewModel.checkLoginStatus()) {

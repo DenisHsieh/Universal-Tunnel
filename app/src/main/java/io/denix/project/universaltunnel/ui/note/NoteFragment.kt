@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.databinding.FragmentNoteBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class NoteFragment : Fragment() {
@@ -65,7 +65,7 @@ class NoteFragment : Fragment() {
         val sharedPrefsUtil = SharedPrefsUtil()
         this.context?.let { userId = sharedPrefsUtil.getLoginUserId(it) }
 
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             // 使用 userId 查詢 noteList
             val noteList = noteViewModel.getNotesByUser(userId)
             noteAdapter = NoteAdapter(noteList)
