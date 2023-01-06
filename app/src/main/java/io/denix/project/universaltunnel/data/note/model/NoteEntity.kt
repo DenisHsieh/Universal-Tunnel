@@ -4,16 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import io.denix.project.universaltunnel.data.external.Note
-import io.denix.project.universaltunnel.data.external.User
-import io.denix.project.universaltunnel.data.user.model.UserEntity
 
 @Entity(tableName = "note_table")
 data class NoteEntity(
     @PrimaryKey(autoGenerate = true) val id: Int?,
     @ColumnInfo(name = "userId") val userId: Int?,
-    @ColumnInfo(name = "title") val title: String?,
-    @ColumnInfo(name = "content") val content: String?,
-    @ColumnInfo(name = "backgroundColor") val backgroundColor: String?
+    @ColumnInfo(name = "title") var title: String?,
+    @ColumnInfo(name = "content") var content: String?,
+    @ColumnInfo(name = "imageUrl") var imageUrl: String?,
+    @ColumnInfo(name = "backgroundColor") var backgroundColor: String?
 )
 
 fun NoteEntity.asExternalModel() = Note(
@@ -21,5 +20,6 @@ fun NoteEntity.asExternalModel() = Note(
     userId = userId,
     title = title,
     content = content,
+    imageUrl = imageUrl,
     backgroundColor = backgroundColor
 )

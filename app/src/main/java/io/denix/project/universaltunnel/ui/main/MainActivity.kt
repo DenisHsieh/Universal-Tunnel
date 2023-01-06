@@ -18,11 +18,13 @@ import io.denix.project.universaltunnel.R
 import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
+import io.denix.project.universaltunnel.data.external.User
 import io.denix.project.universaltunnel.databinding.ActivityMainBinding
 import io.denix.project.universaltunnel.databinding.NavHeaderMainBinding
 import io.denix.project.universaltunnel.ui.user.UserActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -111,16 +113,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showUserInfo() {
-        if (userId == 0) {
-            // 取得 login data，提取登入 user 資訊
-            lifecycleScope.launch(Dispatchers.IO) {
-                val user = viewModel.getUserFromLoginData()
-                navHeaderMainBinding.textViewUserName.text = "${user.firstName} ${user.lastName}"
-                navHeaderMainBinding.textViewUserMail.text = "${user.firstName}@tunnel.com"
+        var user: User
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                user = if (userId == 0) {
+                    // 取得 login data，提取登入 user 資訊
+                    viewModel.getUserFromLoginData()
+                } else {
+                    viewModel.getUserData(userId)
+                }
             }
-        } else {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val user = viewModel.getUserData(userId)
+            withContext(Dispatchers.Main) {
                 navHeaderMainBinding.textViewUserName.text = "${user.firstName} ${user.lastName}"
                 navHeaderMainBinding.textViewUserMail.text = "${user.firstName}@tunnel.com"
             }

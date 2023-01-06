@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.denix.project.universaltunnel.R
@@ -57,8 +59,8 @@ class UserActivity : AppCompatActivity() {
         animateProgressBarAndShowCharacters()
 
         // 判斷是否有網路
-        lifecycleScope.launch(Dispatchers.IO) {
-            connectivityManagerNetworkMonitor.isOnline.collect { isOnline ->
+        lifecycleScope.launch {
+            connectivityManagerNetworkMonitor.isOnline.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect { isOnline ->
                 when(isOnline) {
                     true -> {
                         Snackbar.make(binding.root, getString(R.string.network_status_online), Snackbar.LENGTH_LONG).show()
@@ -195,8 +197,8 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun animateProgressBarAndShowCharacters() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.progressBarFlow.collect { progressStatus ->
+        lifecycleScope.launch {
+            viewModel.progressBarFlow.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect { progressStatus ->
                 progressBar.progress = progressStatus
 
                 if (progressStatus == 100) {

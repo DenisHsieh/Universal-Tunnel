@@ -17,7 +17,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-class NoteViewModel(
+class NoteFragmentViewModel(
     application: Application,
     private val noteDao: NoteDao,
     private val loginDao: LoginDao,
@@ -38,7 +38,9 @@ class NoteViewModel(
 
     private fun fetchAllNotes() {
         viewModelScope.launch(ioDispatcher) {
-            noteRepository.syncInDatabase()
+            if (noteDao.getNoteEntities().isEmpty()) {
+                noteRepository.syncInDatabase()
+            }
 
 //            檢查使否有從dataSource，取得Note資料
             noteRepository.getNotes().collect { noteList ->

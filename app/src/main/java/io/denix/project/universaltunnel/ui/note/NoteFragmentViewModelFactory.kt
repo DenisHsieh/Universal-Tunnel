@@ -7,14 +7,14 @@ import androidx.lifecycle.ViewModelProvider
 import io.denix.project.universaltunnel.data.login.LoginDao
 import io.denix.project.universaltunnel.data.note.model.NoteDao
 
-class NoteViewModelFactory(
+class NoteFragmentViewModelFactory(
     val application: Application,
     val noteDao: NoteDao,
     val loginDao: LoginDao,
-    val assetManager: AssetManager
+    private val assetManager: AssetManager
     ) : ViewModelProvider.AndroidViewModelFactory(application) {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return NoteViewModel(application, noteDao, loginDao, assetManager) as T
+        return NoteFragmentViewModel(application, noteDao, loginDao, assetManager) as T
     }
 }

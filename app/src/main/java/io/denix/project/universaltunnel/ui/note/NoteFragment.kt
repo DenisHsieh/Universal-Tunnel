@@ -11,15 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
+import io.denix.project.universaltunnel.data.external.Note
 import io.denix.project.universaltunnel.databinding.FragmentNoteBinding
+import io.denix.project.universaltunnel.ui.note.recyclerview.NoteAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NoteFragment : Fragment() {
 
     private var _binding: FragmentNoteBinding? = null
     private val binding get() = _binding!!
-    private lateinit var noteViewModel: NoteViewModel
+    private lateinit var noteFragmentViewModel: NoteFragmentViewModel
 
     private lateinit var recyclerViewNote: RecyclerView
     private lateinit var noteAdapter: NoteAdapter
@@ -35,8 +38,8 @@ class NoteFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         initializeRecyclerView()
     }
@@ -52,8 +55,9 @@ class NoteFragment : Fragment() {
         val noteDao = utRoomDatabase.noteDao()
         val loginDao = utRoomDatabase.loginDao()
 
-        noteViewModel = ViewModelProvider(this,
-            NoteViewModelFactory(application, noteDao, loginDao, application.assets))[NoteViewModel::class.java]
+        noteFragmentViewModel = ViewModelProvider(this,
+            NoteFragmentViewModelFactory(application, noteDao, loginDao, application.assets)
+        )[NoteFragmentViewModel::class.java]
     }
 
     private fun initializeRecyclerView() {
@@ -65,11 +69,16 @@ class NoteFragment : Fragment() {
         val sharedPrefsUtil = SharedPrefsUtil()
         this.context?.let { userId = sharedPrefsUtil.getLoginUserId(it) }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            // 使用 userId 查詢 noteList
-            val noteList = noteViewModel.getNotesByUser(userId)
-            noteAdapter = NoteAdapter(noteList)
-            recyclerViewNote.adapter = noteAdapter
+        var noteList: List<Note>
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                // 使用 userId 查詢 noteList
+                noteList = noteFragmentViewModel.getNotesByUser(userId)
+            }
+            withContext(Dispatchers.Main) {
+                noteAdapter = NoteAdapter(noteList)
+                recyclerViewNote.adapter = noteAdapter
+            }
         }
     }
 }

@@ -13,5 +13,5 @@ interface NoteRepository : Syncable {
     /**
      * Gets data for a specific note
      */
-    fun getNote(id: Int): Flow<Note>
+    fun getNote(noteId: Int): Flow<Note>
 }

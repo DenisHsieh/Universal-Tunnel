@@ -9,7 +9,8 @@ import kotlinx.serialization.Serializable
 data class NetworkNote(
     val id: Int?,
     val userId: Int?,
-    val title: String?,
-    val content: String?,
-    val backgroundColor: String?
+    var title: String?,
+    var content: String?,
+    var imageUrl: String?,
+    var backgroundColor: String?
 )

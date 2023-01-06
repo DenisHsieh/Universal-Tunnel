@@ -1,10 +1,12 @@
-package io.denix.project.universaltunnel.ui.note
+package io.denix.project.universaltunnel.ui.note.recyclerview
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.denix.project.universaltunnel.data.external.Note
 import io.denix.project.universaltunnel.databinding.NoteItemBinding
+import io.denix.project.universaltunnel.ui.note.edit.EditNoteActivity
 
 class NoteAdapter(private val noteList: List<Note>) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
@@ -12,6 +14,12 @@ class NoteAdapter(private val noteList: List<Note>) : RecyclerView.Adapter<NoteA
         fun bindData(item: Note) {
             binding.textViewNoteTitle.text = item.title
             binding.textViewNoteContent.text = item.content
+
+            binding.noteItem.setOnClickListener {
+                val intent = Intent(itemView.context, EditNoteActivity::class.java)
+                intent.putExtra("noteId", item.id)
+                itemView.context.startActivity(intent)
+            }
         }
     }
 
