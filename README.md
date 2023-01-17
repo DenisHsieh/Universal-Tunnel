@@ -1,5 +1,5 @@
 # Universal-Tunnel: Build your second brain 
-# (MVVM/Jetpack Room/Kotlin Coroutine & Flow/Airbnb Epoxy/Firebase Crashlytics & Cloud Message/LeakCanary)
+# (MVVM/Jetpack Room/Kotlin Coroutine & Flow/多國語系/Airbnb Epoxy/Firebase Crashlytics & Cloud Message/LeakCanary)
 >**A concept application that integrates common personal usages including Health, Finance, Media, Note...**
 
 ### Data Model
