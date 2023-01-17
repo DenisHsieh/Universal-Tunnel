@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class HealthViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Coming soon...(Health)"
+        value = "Upcoming...(Health)"
     }
     val text: LiveData<String> = _text
 }

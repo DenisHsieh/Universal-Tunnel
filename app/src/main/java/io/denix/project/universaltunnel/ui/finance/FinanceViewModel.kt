@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class FinanceViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Coming soon...(Finance)"
+        value = "Upcoming...(Finance)"
     }
     val text: LiveData<String> = _text
 }

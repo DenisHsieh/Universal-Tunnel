@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity() {
         initializeUi()
         userId = intent.getIntExtra("userId", 0)
 
-        ScreenSizeUtil.screenWidthDp = (this.resources.displayMetrics.widthPixels / this.resources.displayMetrics.density).toInt()
-        ScreenSizeUtil.screenHeightDp = (this.resources.displayMetrics.heightPixels / this.resources.displayMetrics.density).toInt()
-        Log.d("Screen", "${ScreenSizeUtil.screenWidthDp}, ${ScreenSizeUtil.screenHeightDp}")
+        val screenSizeInfo = ScreenSizeUtil.calculateScreenSize(this.resources)
+        Log.d("screenSizeInfo", "${screenSizeInfo.widthDp}, ${screenSizeInfo.heightDp}")
+        Log.d("screenSizeInfo", "${screenSizeInfo.widthPixels}, ${screenSizeInfo.heightPixels}")
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

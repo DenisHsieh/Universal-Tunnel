@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class MediaViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Coming soon...(Media)"
+        value = "Upcoming...(Media)"
     }
     val text: LiveData<String> = _text
 }
