@@ -68,7 +68,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
+            android:id="@+id/coordinatorLayout_editNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -80,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:backgroundTint="@color/material_dark"
                 app:menu="@menu/edit_note_menu" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

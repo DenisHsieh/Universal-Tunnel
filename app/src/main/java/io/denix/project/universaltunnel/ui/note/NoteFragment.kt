@@ -1,5 +1,6 @@
 package io.denix.project.universaltunnel.ui.note
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.data.external.Note
 import io.denix.project.universaltunnel.databinding.FragmentNoteBinding
+import io.denix.project.universaltunnel.ui.note.add.AddNoteActivity
 import io.denix.project.universaltunnel.ui.note.recyclerview.NoteAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +38,15 @@ class NoteFragment : Fragment() {
 
         _binding = FragmentNoteBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.floatingActionButtonAddNote.setOnClickListener {
+            val intent = Intent(this.context, AddNoteActivity::class.java)
+            this.context?.startActivity(intent)
+        }
     }
 
     override fun onResume() {

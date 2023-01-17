@@ -7,8 +7,8 @@ import io.denix.project.universaltunnel.data.external.Note
 
 @Entity(tableName = "note_table")
 data class NoteEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int?,
-    @ColumnInfo(name = "userId") val userId: Int?,
+    @PrimaryKey(autoGenerate = true) var id: Int?,
+    @ColumnInfo(name = "userId") var userId: Int?,
     @ColumnInfo(name = "title") var title: String?,
     @ColumnInfo(name = "content") var content: String?,
     @ColumnInfo(name = "imageUrl") var imageUrl: String?,

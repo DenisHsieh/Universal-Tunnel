@@ -52,6 +52,11 @@ class FakeNetworkNoteRepository(
         noteDao.updateNotes(noteEntityList)
     }
 
+    suspend fun addSingleNote(note: Note) {
+        val noteEntityList = listOf(note.asNoteEntity())
+        noteDao.insertOrIgnoreNotes(noteEntityList)
+    }
+
     override suspend fun syncInDatabase() {
         val networkNotes = dataSource.getNotes()
         noteDao.deleteAllNotes()

@@ -2,6 +2,7 @@ package io.denix.project.universaltunnel.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import io.denix.project.universaltunnel.R
+import io.denix.project.universaltunnel.common.ScreenSizeUtil
 import io.denix.project.universaltunnel.common.SharedPrefsUtil
 import io.denix.project.universaltunnel.common.UtApplication
 import io.denix.project.universaltunnel.common.UtRoomDatabase
@@ -42,6 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         initializeUi()
         userId = intent.getIntExtra("userId", 0)
+
+        ScreenSizeUtil.screenWidthDp = (this.resources.displayMetrics.widthPixels / this.resources.displayMetrics.density).toInt()
+        ScreenSizeUtil.screenHeightDp = (this.resources.displayMetrics.heightPixels / this.resources.displayMetrics.density).toInt()
+        Log.d("Screen", "${ScreenSizeUtil.screenWidthDp}, ${ScreenSizeUtil.screenHeightDp}")
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

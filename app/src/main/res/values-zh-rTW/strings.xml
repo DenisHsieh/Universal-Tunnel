@@ -20,4 +20,6 @@
     <string name="cancel">取消</string>
     <string name="note_title">標題</string>
     <string name="note_content">內容</string>
+    <string name="add_note">新增筆記</string>
+    <string name="discard_empty_note">已捨棄空白記事</string>
 </resources>

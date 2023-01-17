@@ -35,5 +35,7 @@
 
     <string name="note_title">Title</string>
     <string name="note_content">Content</string>
+    <string name="add_note">Add Note</string>
+    <string name="discard_empty_note">Discard empty note!</string>
 
 </resources>

@@ -4,8 +4,8 @@ package io.denix.project.universaltunnel.data.external
  * External data layer representation of a Note
  */
 data class Note(
-    val id: Int?,
-    val userId: Int?,
+    var id: Int?,
+    var userId: Int?,
     var title: String?,
     var content: String?,
     var imageUrl: String?,
