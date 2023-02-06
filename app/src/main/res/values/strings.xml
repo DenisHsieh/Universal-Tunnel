@@ -38,4 +38,9 @@
     <string name="add_note">Add Note</string>
     <string name="discard_empty_note">Discard empty note!</string>
 
+    <string name="msg_token_fmt" translatable="false">FCM registration Token: %s</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_ut_channel</string>
+    <string name="default_notification_channel_name" translatable="false">Ut</string>
+    <string name="msg_subscribed" translatable="false">Subscribed to Ut topic</string>
+    <string name="msg_subscribe_failed" translatable="false">Failed to subscribe to Ut topic</string>
 </resources>

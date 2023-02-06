@@ -1,6 +1,7 @@
 package io.denix.project.universaltunnel.ui.user
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -42,7 +43,7 @@ class UserActivity : AppCompatActivity() {
 
     private var userId: Int? = null
 
-    private val connectivityManagerNetworkMonitor = ConnectivityManagerNetworkMonitor(this)
+    private var connectivityManagerNetworkMonitor: ConnectivityManagerNetworkMonitor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +60,11 @@ class UserActivity : AppCompatActivity() {
         animateProgressBarAndShowCharacters()
 
         // 判斷是否有網路
+        val connectivityManager = getSystemService(ConnectivityManager::class.java)
+        connectivityManagerNetworkMonitor = ConnectivityManagerNetworkMonitor(connectivityManager)
+
         lifecycleScope.launch {
-            connectivityManagerNetworkMonitor.isOnline.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect { isOnline ->
+            connectivityManagerNetworkMonitor!!.isOnline.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect { isOnline ->
                 when(isOnline) {
                     true -> {
                         Snackbar.make(binding.root, getString(R.string.network_status_online), Snackbar.LENGTH_LONG).show()
@@ -77,6 +81,11 @@ class UserActivity : AppCompatActivity() {
         super.onResume()
 
         viewModel.onViewReady()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        connectivityManagerNetworkMonitor = null
     }
 
     private fun initializeUi() {
