@@ -21,8 +21,8 @@ android {
         applicationId "io.denix.project.universaltunnel"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         archivesBaseName = "UniversalTunnel-v${versionCode}(${versionName})"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
